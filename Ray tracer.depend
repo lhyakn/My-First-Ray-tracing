@@ -1,0 +1,104 @@
+# depslib dependency file v1.0
+1588162620 source:e:\ray tracer\ray tracer\main.cpp
+	<ctime>
+	<iostream>
+	<math.h>
+	"rtweekend.h"
+	"hittable_list.h"
+	"sphere.h"
+	"camera.h"
+	"material.h"
+	"triangle.h"
+	"omp.h"
+
+1588145527 e:\ray tracer\ray tracer\include\rtweekend.h
+	<cmath>
+	<cstdlib>
+	<limits>
+	<memory>
+	<functional>
+	<random>
+	<ctime>
+	<chrono>
+
+1588158479 e:\ray tracer\ray tracer\include\hittable_list.h
+	"hittable.h"
+	"bvh.h"
+	<memory>
+	<vector>
+
+1588160413 e:\ray tracer\ray tracer\include\hittable.h
+	"ray.h"
+	"aabb.h"
+
+1587778633 e:\ray tracer\ray tracer\include\ray.h
+	"vec3.h"
+
+1587807718 e:\ray tracer\ray tracer\include\vec3.h
+	"rtweekend.h"
+	<iostream>
+	<math.h>
+
+1588160439 e:\ray tracer\ray tracer\include\sphere.h
+	"hittable.h"
+	"vec3.h"
+	"material.h"
+
+1587809346 e:\ray tracer\ray tracer\include\camera.h
+	"rtweekend.h"
+
+1588153332 e:\ray tracer\ray tracer\include\material.h
+	"texture.h"
+
+1588150993 e:\ray tracer\ray tracer\include\texture.h
+	"rtweekend.h"
+	"vec3.h"
+
+1587974330 e:\ray tracer\ray tracer\include\aarect.h
+
+1588160440 e:\ray tracer\ray tracer\include\triangle.h
+	"hittable.h"
+	"vec3.h"
+	"OBJ_Loader.hpp"
+	"bvh.h"
+	<array>
+	<assert.h>
+	<algorithm>
+
+1587966202 e:\ray tracer\ray tracer\include\obj_loader.hpp
+	<optional>
+	<iostream>
+	<vector>
+	<string>
+	<fstream>
+	<math.h>
+
+1588162849 source:e:\ray tracer\ray tracer\src\hittable_list.cpp
+	"hittable_list.h"
+	"material.h"
+
+1588132471 source:e:\ray tracer\ray tracer\src\sphere.cpp
+	"sphere.h"
+
+1587807722 source:e:\ray tracer\ray tracer\src\vec3.cpp
+	"vec3.h"
+
+1588060990 e:\ray tracer\ray tracer\include\aabb.h
+	<limits>
+	"rtweekend.h"
+
+1587968489 source:e:\ray tracer\ray tracer\src\aabb.cpp
+	"ray.h"
+	"aabb.h"
+
+1588141063 source:e:\ray tracer\ray tracer\src\bvh.cpp
+	"bvh.h"
+	<algorithm>
+	<cassert>
+	<iostream>
+
+1588134165 e:\ray tracer\ray tracer\include\bvh.h
+	<memory>
+	<vector>
+	"hittable.h"
+
