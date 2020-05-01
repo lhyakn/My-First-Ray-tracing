@@ -8,14 +8,18 @@
  4. **多线程**:偷懒用了openMP实现的多线程，也算是实现了多线程叭。
  
 # TODO LIST
- 1. 基于渲染方程的更加真实的path tracing，蒙特卡罗方法。
+ ~~1. 基于渲染方程的更加真实的path tracing，蒙特卡罗方法。~~
+ 1.1 微表面模型的实现(Microfacet Model)
  2. 更先进的光线追踪算法PPM之类的。
 
 # 图片
   ![Balls](https://github.com/lhyakn/My-First-Ray-tracing/blob/master/bin/Release/Balls.png) 
   
   ![Cornell Box](https://github.com/lhyakn/My-First-Ray-tracing/blob/master/bin/Release/glass_box.png)
-
+  
+  ![Cornell Box PBR](https://github.com/lhyakn/My-First-Ray-tracing/blob/master/bin/Release/Cornell_box.png)
+  采样数为1000的基于物理的全局光照渲染效果
+  
 # 参考
  1.[Ray Tracing in One Weekend](https://raytracing.github.io/) 
  
