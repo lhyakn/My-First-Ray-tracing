@@ -9,7 +9,7 @@ class sphere: public hittable {
     public:
         sphere() {}
         sphere(vec3 cen, double r, shared_ptr<material> m)
-            : center(cen), radius(r), mat_ptr(m),area(4 * pi * r * r),isemit(m->has_emition()) {};
+            : center(cen), radius(r), mat_ptr(m),area(4 * pi * r * r) {};
 
         virtual bool hit(const ray& r, double tmin, double tmax, hit_record& rec) const;
 

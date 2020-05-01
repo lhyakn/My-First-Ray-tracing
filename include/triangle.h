@@ -22,7 +22,6 @@ class triangle : public hittable
             e2 = v2 - v0;
             normal = unit_vector(cross(e1,e2));
             area = cross(e1,e2).length()*0.5f;
-            isemit = _m->has_emition();
         }
 
         virtual bool hit(const ray& r, double tmin, double tmax, hit_record& rec) const{
@@ -110,7 +109,6 @@ class MeshTriangle : public hittable
             loader.LoadFile(filename);
             area = 0;
             mat_ptr = mt;
-            isemit = mt->has_emition();
             assert(loader.LoadedMeshes.size() == 1);
             auto mesh = loader.LoadedMeshes[0];
 

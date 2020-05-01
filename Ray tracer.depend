@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1588162620 source:e:\ray tracer\ray tracer\main.cpp
+1588333371 source:e:\ray tracer\ray tracer\main.cpp
 	<ctime>
 	<iostream>
 	<math.h>
@@ -11,7 +11,7 @@
 	"triangle.h"
 	"omp.h"
 
-1588145527 e:\ray tracer\ray tracer\include\rtweekend.h
+1588319856 e:\ray tracer\ray tracer\include\rtweekend.h
 	<cmath>
 	<cstdlib>
 	<limits>
@@ -39,7 +39,7 @@
 	<iostream>
 	<math.h>
 
-1588160439 e:\ray tracer\ray tracer\include\sphere.h
+1588325833 e:\ray tracer\ray tracer\include\sphere.h
 	"hittable.h"
 	"vec3.h"
 	"material.h"
@@ -47,7 +47,7 @@
 1587809346 e:\ray tracer\ray tracer\include\camera.h
 	"rtweekend.h"
 
-1588153332 e:\ray tracer\ray tracer\include\material.h
+1588337760 e:\ray tracer\ray tracer\include\material.h
 	"texture.h"
 
 1588150993 e:\ray tracer\ray tracer\include\texture.h
@@ -56,7 +56,7 @@
 
 1587974330 e:\ray tracer\ray tracer\include\aarect.h
 
-1588160440 e:\ray tracer\ray tracer\include\triangle.h
+1588325957 e:\ray tracer\ray tracer\include\triangle.h
 	"hittable.h"
 	"vec3.h"
 	"OBJ_Loader.hpp"
@@ -73,7 +73,7 @@
 	<fstream>
 	<math.h>
 
-1588162849 source:e:\ray tracer\ray tracer\src\hittable_list.cpp
+1588332682 source:e:\ray tracer\ray tracer\src\hittable_list.cpp
 	"hittable_list.h"
 	"material.h"
 

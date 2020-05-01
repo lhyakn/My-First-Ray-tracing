@@ -43,7 +43,7 @@ hittable_list random_scene() {
     //MeshTriangle light_("E:/ray tracer/Ray tracer/models/cornellbox/light.obj", light);
 
     world.add(make_shared<MeshTriangle>("E:/ray tracer/Ray tracer/models/cornellbox/floor.obj",white));
-    world.add(make_shared<MeshTriangle>("E:/ray tracer/Ray tracer/models/cornellbox/shortbox.obj", glass));
+    world.add(make_shared<MeshTriangle>("E:/ray tracer/Ray tracer/models/cornellbox/shortbox.obj", white));
     world.add(make_shared<MeshTriangle>("E:/ray tracer/Ray tracer/models/cornellbox/tallbox.obj", white));
     world.add(make_shared<MeshTriangle>("E:/ray tracer/Ray tracer/models/cornellbox/left.obj", red));
     world.add(make_shared<MeshTriangle>("E:/ray tracer/Ray tracer/models/cornellbox/right.obj", green));
@@ -52,10 +52,11 @@ hittable_list random_scene() {
     return world;
 }
 
-vec3 ray_color(const ray& r, const vec3& background, const hittable_list& world, int depth) {
+vec3 ray_color(const ray& r, const vec3& background, const hittable_list& world, int depth, double RussianRoulette) {
+    /*
     hit_record rec;
-    //hit_record pos;
-    //double pdf;
+    hit_record pos;
+    double pdf;
     // If we've exceeded the ray bounce limit, no more light is gathered.
     if (depth <= 0)
         return vec3(0,0,0);
@@ -73,7 +74,7 @@ vec3 ray_color(const ray& r, const vec3& background, const hittable_list& world,
 
     // 对光源采样
 
-    /*
+
     world.sample_light(pos,pdf);
     vec3 position = pos.p;
     vec3 wi = unit_vector(r.direction());
@@ -81,26 +82,90 @@ vec3 ray_color(const ray& r, const vec3& background, const hittable_list& world,
     vec3 NN = pos.normal;
     ray temp(rec.p,pos.p-rec.p);
     emitted = pos.mat_ptr->emitted();
-    double tt = (pos.p-rec.p).length() / unit_vector(pos.p-rec.p).length();
-    if(!world.hit(temp, 0.0001, tt, pos)){
-        //std::cout << pdf << std::endl;
-        emitted = emitted * rec.mat_ptr->eval(wi,wo,rec.normal) * dot(wo,rec.normal) * dot(wo,NN) / (position-rec.p).length_squared() / pdf;
+
+    if(!world.hit(temp, 0.0001, infinity, pos)){
+            if(pos.p-)
+        //emitted = emitted * rec.mat_ptr->eval(wi,wo,rec.normal) * dot(wo,rec.normal) * dot(wo,NN) / (position-rec.p).length_squared() / pdf;
     }
     else emitted = emitted - emitted;
-    */
+
 
     return emitted + attenuation * ray_color(scattered, background, world, depth-1);
+    */
+    hit_record intersect;
+    hit_record lightpos;
+    hit_record blockcheck;
+    double pdf_light;
+    vec3 L_dir(0.0d,0.0d,0.0d);
+    vec3 L_indir(0.0d,0.0d,0.0d);
+    vec3 hitcolor = background;
+
+
+    if (depth <= 0)
+        return vec3(0,0,0);
+
+    //如果没有击中
+    if (!world.hit(r, 0.0001, infinity, intersect))
+        return hitcolor;
+
+    vec3 emitted = intersect.mat_ptr->emitted();
+
+    //如果击中了光源
+    if (emitted.length_squared() > EPSILON)
+        return emitted;
+
+
+    //对光源进行采样
+    world.sample_light(lightpos,pdf_light);
+    vec3 wo = unit_vector(lightpos.p - intersect.p);
+    vec3 wi = unit_vector(r.direction());
+    vec3 N = unit_vector(intersect.normal);
+    ray p2light(intersect.p,lightpos.p - intersect.p);
+
+    if(world.hit(p2light,0.0001,infinity,blockcheck))
+    {
+        //如果中间没有被阻挡
+        if(std::fabs((lightpos.p - intersect.p).length() - (blockcheck.p - intersect.p).length()) < EPSILON)
+        {
+            vec3 NN = unit_vector(blockcheck.normal);
+            vec3 emit = lightpos.mat_ptr->emitted();
+            L_dir = emit * intersect.mat_ptr->eval(wi,wo,N) * dot(wo,N) * dot(-wo,NN) / (lightpos.p-intersect.p).length_squared() / pdf_light;
+        }
+    }
+
+    //计算间接光照//俄罗斯轮盘赌
+
+
+    double P_RR = random_double();
+
+    if( P_RR < RussianRoulette )
+    {
+        wo = unit_vector(intersect.mat_ptr->sample(wi,N));
+        ray bounce(intersect.p,wo);
+        hit_record tracebounce;
+        if(world.hit(bounce,0.001,infinity,tracebounce))
+        {
+            if(tracebounce.mat_ptr->emitted().length() < EPSILON)
+            {
+                L_indir = ray_color(bounce,background,world,depth-1,RussianRoulette) * intersect.mat_ptr->eval(wi,wo,N) * dot(wo,N) / intersect.mat_ptr->pdf(wi,wo,N) / RussianRoulette;
+            }
+        }
+    }
+
+    hitcolor = L_dir + L_indir;
+    return hitcolor;
 }
 
 
 
 int main() {
-    const int image_width = 512;
-    const int image_height = 512;
-    const int samples_per_pixel = 2500;
+    const int image_width = 1024;
+    const int image_height = 1024;
+    const int samples_per_pixel = 1000;
     const int max_depth = 50;
     const auto aspect_ratio = double(image_width) / image_height;
     const vec3 background(0,0,0);
+    const double RussianRoulette = 0.8d;
 
     auto world = random_scene();
 
@@ -128,7 +193,7 @@ int main() {
                 auto u = (i + random_double()) / image_width;
                 auto v = (j + random_double()) / image_height;
                 ray r = cam.get_ray(u, v);
-                color += ray_color(r, background, world, max_depth);
+                color += ray_color(r, background, world, max_depth, RussianRoulette);
             }
             framebuffer[j][i] = std::move(color);
         }

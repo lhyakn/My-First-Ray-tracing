@@ -34,9 +34,9 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="include/OBJ_Loader.hpp" />
 		<Unit filename="include/ThreadPool.h" />
 		<Unit filename="include/aabb.h" />
-		<Unit filename="include/aarect.h" />
 		<Unit filename="include/bvh.h" />
 		<Unit filename="include/camera.h" />
 		<Unit filename="include/hittable.h" />

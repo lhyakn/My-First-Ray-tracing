@@ -18,13 +18,34 @@ class material {
             return vec3(0,0,0);
         }
 
-        virtual bool has_emition(){
-            return false;
-        }
         virtual bool scatter(
             const ray& r_in, const hit_record& rec, vec3& attenuation, ray& scattered
         ) const = 0;
+
         virtual vec3 eval(const vec3 &wi, const vec3 &wo, const vec3 &N) const = 0;
+
+        virtual vec3 sample(const vec3 &wi, const vec3 &N) const = 0;
+
+        virtual double pdf(const vec3 &wi,const vec3 &wo, const vec3 &N) const = 0;
+
+        vec3 toWorld(const vec3 &a,const vec3 &N) const {
+            vec3 B,C;
+            if(std::fabs(N.x()) > std::fabs(N.y()))
+            {
+                double invLen = 1.0f / std::sqrt(N.x()*N.x()+N.z()*N.z());
+                C = vec3(N.z() * invLen, 0.0f, -N.x() * invLen);
+            }
+            else
+            {
+                double invLen = 1.0f / std::sqrt(N.y()*N.y()+N.z()*N.z());
+                C = vec3(0.0d,N.z() * invLen,-N.y() * invLen);
+            }
+            B = cross(C,N);
+            return a.x() * B + a.y() * C + a.z() * N;
+        }
+
+
+
     public:
         vec3 Kd;
 };
@@ -42,15 +63,32 @@ class lambertian : public material {
             return true;
         }
 
+
         virtual vec3 eval(const vec3 &wi, const vec3 &wo, const vec3 &N) const {
             double cosalpha = dot(N, wo);
-            if (cosalpha > 0.0f) {
+            if (cosalpha > 0.0d) {
                 vec3 diffuse = Kd / pi;
                 return diffuse;
             }
             else
-                return vec3(0.0f,0.0f,0.0f);
+                return vec3(0.0d,0.0d,0.0d);
         }
+
+        virtual vec3 sample(const vec3 &wi, const vec3 &N) const{
+            double x_1 = random_double(), x_2 = random_double();
+            double z = std::fabs(1.0d - 2.0d * x_1);
+            double r = std::sqrt(1.0d - z * z),phi = 2 * pi * x_2;
+            vec3 localRay(r * std::cos(phi), r * std::sin(phi),z);
+            return toWorld(localRay,N);
+        }
+
+        virtual double pdf(const vec3 &wi,const vec3 &wo, const vec3 &N) const{
+            if(dot(wo,N) > 0.0d)
+                return 0.5d / pi;
+            else
+                return 0.0f;
+        }
+
 
     public:
         shared_ptr<texture> albedo;
@@ -69,6 +107,7 @@ class metal : public material {
             return (dot(scattered.direction(), rec.normal) > 0);
         }
 
+        //待改
         virtual vec3 eval(const vec3 &wi, const vec3 &wo, const vec3 &N) const {
             double cosalpha = dot(N, wo);
             if (cosalpha > 0.0f) {
@@ -77,6 +116,21 @@ class metal : public material {
             }
             else
                 return vec3(0.0f,0.0f,0.0f);
+        }
+        //待改
+        virtual vec3 sample(const vec3 &wi, const vec3 &N) const{
+            double x_1 = random_double(), x_2 = random_double();
+            double z = std::fabs(1.0d - 2.0d * x_1);
+            double r = std::sqrt(1.0d - z * z),phi = 2 * pi * x_2;
+            vec3 localRay(r * std::cos(phi), r * std::sin(phi),z);
+            return toWorld(localRay,N);
+        }
+        //待改
+        virtual double pdf(const vec3 &wi,const vec3 &wo, const vec3 &N) const{
+            if(dot(wo,N) > 0.0d)
+                return 0.5d / pi;
+            else
+                return 0.0f;
         }
 
     public:
@@ -121,6 +175,7 @@ class dielectric : public material {
             return true;
         }
 
+        //待改
         virtual vec3 eval(const vec3 &wi, const vec3 &wo, const vec3 &N) const {
             double cosalpha = dot(N, wo);
             if (cosalpha > 0.0f) {
@@ -130,6 +185,21 @@ class dielectric : public material {
             else
                 return vec3(0.0f,0.0f,0.0f);
         }
+        //待改
+        virtual vec3 sample(const vec3 &wi, const vec3 &N) const{
+            double x_1 = random_double(), x_2 = random_double();
+            double z = std::fabs(1.0d - 2.0d * x_1);
+            double r = std::sqrt(1.0d - z * z),phi = 2 * pi * x_2;
+            vec3 localRay(r * std::cos(phi), r * std::sin(phi),z);
+            return toWorld(localRay,N);
+        }
+        //待改
+        virtual double pdf(const vec3 &wi,const vec3 &wo, const vec3 &N) const{
+            if(dot(wo,N) > 0.0d)
+                return 0.5d / pi;
+            else
+                return 0.0f;
+         }
 
         double ref_idx;
 };
@@ -152,10 +222,7 @@ class diffuse_light : public material  {
             return emit->value();
         }
 
-        virtual bool has_emition(){
-            return true;
-        }
-
+        //待改
         virtual vec3 eval(const vec3 &wi, const vec3 &wo, const vec3 &N) const {
             double cosalpha = dot(N, wo);
             if (cosalpha > 0.0f) {
@@ -165,6 +232,21 @@ class diffuse_light : public material  {
             else
                 return vec3(0.0f,0.0f,0.0f);
         }
+        //待改
+        virtual vec3 sample(const vec3 &wi, const vec3 &N) const{
+            double x_1 = random_double(), x_2 = random_double();
+            double z = std::fabs(1.0d - 2.0d * x_1);
+            double r = std::sqrt(1.0d - z * z),phi = 2 * pi * x_2;
+            vec3 localRay(r * std::cos(phi), r * std::sin(phi),z);
+            return toWorld(localRay,N);
+        }
+        //待改
+        virtual double pdf(const vec3 &wi,const vec3 &wo, const vec3 &N)const{
+            if(dot(wo,N) > 0.0d)
+                return 0.5d / pi;
+            else
+                return 0.0f;
+         }
 
     public:
         shared_ptr<texture> emit;

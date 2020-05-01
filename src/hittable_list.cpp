@@ -25,7 +25,7 @@ bool hittable_list::hit(const ray& r, double t_min, double t_max, hit_record& re
 void hittable_list::sample_light(hit_record& rec,double &pdf) const{
     double total_area = 0;
     for (uint32_t k = 0; k < objects.size(); ++k){
-        if(objects[k]->Isemit()){
+        if(objects[k]->get_mt()->emitted().length() > EPSILON){
             total_area += objects[k]->getArea();
         }
     }
@@ -34,7 +34,7 @@ void hittable_list::sample_light(hit_record& rec,double &pdf) const{
     double p = random_double() * total_area;
     total_area = 0;
     for (uint32_t k = 0; k < objects.size(); ++k) {
-        if (objects[k]->Isemit()){
+        if (objects[k]->get_mt()->emitted().length() >EPSILON){
             total_area += objects[k]->getArea();
             if (p <= total_area){
                 objects[k]->Sample(rec, pdf);
