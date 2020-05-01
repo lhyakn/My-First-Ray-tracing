@@ -9,7 +9,8 @@
  
 # TODO LIST
  ~~1. 基于渲染方程的更加真实的path tracing，蒙特卡罗方法。~~
- 1.1 微表面模型的实现(Microfacet Model)
+ 1.1 微表面模型的实现(Microfacet Model) 
+ 
  2. 更先进的光线追踪算法PPM之类的。
 
 # 图片
